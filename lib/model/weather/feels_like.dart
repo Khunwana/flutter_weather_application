@@ -6,19 +6,17 @@ class FeelsLike {
 
   FeelsLike({this.day, this.night, this.eve, this.morn});
 
-  FeelsLike.fromJson(Map<String, dynamic> json) {
-    day = json['day'];
-    night = json['night'];
-    eve = json['eve'];
-    morn = json['morn'];
-  }
+  factory FeelsLike.fromJson(Map<String, dynamic> json) => FeelsLike(
+    day: (json['day'] as num?)?.toDouble(),
+    night: (json['night'] as num?)?.toDouble(),
+    eve: (json['eve'] as num?)?.toDouble(),
+    morn: (json['morn'] as num?)?.toDouble(),
+  );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['day'] = this.day;
-    data['night'] = this.night;
-    data['eve'] = this.eve;
-    data['morn'] = this.morn;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    'day': day,
+    'night': night,
+    'eve': eve,
+    'morn': morn,
+  };
 }

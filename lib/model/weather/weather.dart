@@ -1,6 +1,7 @@
 import 'current.dart';
-import 'hourly.dart';
 import 'daily.dart';
+import 'hourly.dart';
+
 class Weather {
   double? lat;
   double? lon;
@@ -10,54 +11,39 @@ class Weather {
   List<Hourly>? hourly;
   List<Daily>? daily;
 
-  Weather(
-      {this.lat,
-        this.lon,
-        this.timezone,
-        this.timezoneOffset,
-        this.current,
-        this.hourly,
-        this.daily});
+  Weather({
+    this.lat,
+    this.lon,
+    this.timezone,
+    this.timezoneOffset,
+    this.current,
+    this.hourly,
+    this.daily,
+  });
 
-  Weather.fromJson(Map<String, dynamic> json) {
-    lat = json['lat'];
-    lon = json['lon'];
-    timezone = json['timezone'];
-    timezoneOffset = json['timezone_offset'];
-    current =
-    json['current'] != null ? new Current.fromJson(json['current']) : null;
-    if (json['hourly'] != null) {
-      hourly = <Hourly>[];
-      json['hourly'].forEach((v) {
-        hourly?.add(new Hourly.fromJson(v));
-      });
-    }
-    if (json['daily'] != null) {
-      daily = <Daily>[];
-      json['daily'].forEach((v) {
-        daily?.add(new Daily.fromJson(v));
-      });
-    }
-  }
+  factory Weather.fromJson(Map<String, dynamic> json) => Weather(
+    lat: (json['lat'] as num?)?.toDouble(),
+    lon: (json['lon'] as num?)?.toDouble(),
+    timezone: json['timezone'] as String?,
+    timezoneOffset: json['timezone_offset'] as int?,
+    current: json['current'] == null
+        ? null
+        : Current.fromJson(json['current'] as Map<String, dynamic>),
+    hourly: (json['hourly'] as List<dynamic>?)
+        ?.map((e) => Hourly.fromJson(e as Map<String, dynamic>))
+        .toList(),
+    daily: (json['daily'] as List<dynamic>?)
+        ?.map((e) => Daily.fromJson(e as Map<String, dynamic>))
+        .toList(),
+  );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['lat'] = this.lat;
-    data['lon'] = this.lon;
-    data['timezone'] = this.timezone;
-    data['timezone_offset'] = this.timezoneOffset;
-    final current = this.current;
-    if (current != null) {
-      data['current'] = current.toJson();
-    }
-    final hourly = this.hourly;
-    if (hourly != null) {
-      data['hourly'] = hourly.map((v) => v.toJson()).toList();
-    }
-    final daily = this.daily;
-    if (daily != null) {
-      data['daily'] = daily.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    'lat': lat,
+    'lon': lon,
+    'timezone': timezone,
+    'timezone_offset': timezoneOffset,
+    'current': current?.toJson(),
+    'hourly': hourly?.map((e) => e.toJson()).toList(),
+    'daily': daily?.map((e) => e.toJson()).toList(),
+  };
 }

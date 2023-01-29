@@ -1,6 +1,4 @@
 import 'weather.dart';
-import 'feels_like.dart';
-import 'temp.dart';
 
 class Current {
   int? dt;
@@ -11,7 +9,7 @@ class Current {
   int? pressure;
   int? humidity;
   double? dewPoint;
-  int? uvi;
+  double? uvi;
   int? clouds;
   int? visibility;
   double? windSpeed;
@@ -19,67 +17,59 @@ class Current {
   double? windGust;
   List<Weather>? weather;
 
-  Current(
-      {this.dt,
-        this.sunrise,
-        this.sunset,
-        this.temp,
-        this.feelsLike,
-        this.pressure,
-        this.humidity,
-        this.dewPoint,
-        this.uvi,
-        this.clouds,
-        this.visibility,
-        this.windSpeed,
-        this.windDeg,
-        this.windGust,
-        this.weather});
+  Current({
+    this.dt,
+    this.sunrise,
+    this.sunset,
+    this.temp,
+    this.feelsLike,
+    this.pressure,
+    this.humidity,
+    this.dewPoint,
+    this.uvi,
+    this.clouds,
+    this.visibility,
+    this.windSpeed,
+    this.windDeg,
+    this.windGust,
+    this.weather,
+  });
 
-  Current.fromJson(Map<String, dynamic> json) {
-    dt = json['dt'];
-    sunrise = json['sunrise'];
-    sunset = json['sunset'];
-    temp = json['temp'];
-    feelsLike = json['feels_like'];
-    pressure = json['pressure'];
-    humidity = json['humidity'];
-    dewPoint = json['dew_point'];
-    uvi = json['uvi'];
-    clouds = json['clouds'];
-    visibility = json['visibility'];
-    windSpeed = json['wind_speed'];
-    windDeg = json['wind_deg'];
-    windGust = json['wind_gust'];
-    if (json['weather'] != null) {
-      weather = <Weather>[];
-      json['weather'].forEach((v) {
-        weather?.add(new Weather.fromJson(v));
-      });
-    }
-  }
+  factory Current.fromJson(Map<String, dynamic> json) => Current(
+    dt: json['dt'] as int?,
+    sunrise: json['sunrise'] as int?,
+    sunset: json['sunset'] as int?,
+    temp: (json['temp'] as num?)?.toDouble(),
+    feelsLike: (json['feels_like'] as num?)?.toDouble(),
+    pressure: json['pressure'] as int?,
+    humidity: json['humidity'] as int?,
+    dewPoint: (json['dew_point'] as num?)?.toDouble(),
+    uvi: (json['uvi'] as num?)?.toDouble(),
+    clouds: json['clouds'] as int?,
+    visibility: json['visibility'] as int?,
+    windSpeed: (json['wind_speed'] as num?)?.toDouble(),
+    windDeg: json['wind_deg'] as int?,
+    windGust: (json['wind_gust'] as num?)?.toDouble(),
+    weather: (json['weather'] as List<dynamic>?)
+        ?.map((e) => Weather.fromJson(e as Map<String, dynamic>))
+        .toList(),
+  );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['dt'] = this.dt;
-    data['sunrise'] = this.sunrise;
-    data['sunset'] = this.sunset;
-    data['temp'] = this.temp;
-    data['feels_like'] = this.feelsLike;
-    data['pressure'] = this.pressure;
-    data['humidity'] = this.humidity;
-    data['dew_point'] = this.dewPoint;
-    data['uvi'] = this.uvi;
-    data['clouds'] = this.clouds;
-    data['visibility'] = this.visibility;
-    data['wind_speed'] = this.windSpeed;
-    data['wind_deg'] = this.windDeg;
-    data['wind_gust'] = this.windGust;
-    final weather = this.weather;
-    if (weather != null) {
-      data['weather'] = weather.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+    'dt': dt,
+    'sunrise': sunrise,
+    'sunset': sunset,
+    'temp': temp,
+    'feels_like': feelsLike,
+    'pressure': pressure,
+    'humidity': humidity,
+    'dew_point': dewPoint,
+    'uvi': uvi,
+    'clouds': clouds,
+    'visibility': visibility,
+    'wind_speed': windSpeed,
+    'wind_deg': windDeg,
+    'wind_gust': windGust,
+    'weather': weather?.map((e) => e.toJson()).toList(),
+  };
 }
-
